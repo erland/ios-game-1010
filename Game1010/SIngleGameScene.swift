@@ -13,6 +13,7 @@ class SingleGameScene: SKScene, BoardObserver {
     var boardView: BoardView?
     var gameDelegate: GameDelegate?
     var selectedBlockView : SelectedBlockView?
+    var selectedBlockViewIndex : Int?
     var selectedOffset : CGPoint?
     var timeText : SKLabelNode?
     var recordLabel : SKLabelNode?
@@ -26,8 +27,8 @@ class SingleGameScene: SKScene, BoardObserver {
     var lastTouchX : Int?
     var lastTouchY : Int?
     var blockViews : [SelectedBlockView] = []
-    var selectedBlockViewOriginalPosition : CGPoint?
-    var selectedBlockViewOriginalColor : UIColor?
+    var blockViewPositions : [CGPoint] = []
+    var blockViewColor : [UIColor] = []
 
     func setup(delegate: GameDelegate, board: Board, startTime: Int, score: Int) {
         self.gameDelegate = delegate
@@ -37,6 +38,8 @@ class SingleGameScene: SKScene, BoardObserver {
                 let block = createNewBlock()
                 view.setup(block: block)
                 blockViews.append(view)
+                blockViewPositions.append(view.position)
+                blockViewColor.append(view.color)
             }
         }
 
@@ -116,17 +119,16 @@ class SingleGameScene: SKScene, BoardObserver {
         }else if pauseButton!.contains(touchLocation) {
             gameDelegate?.gameCompleted(board: boardView!.board!, completed: false, seconds: timeCounter, score: score)
         }else {
-            for view in blockViews {
+            for (i,view) in blockViews.enumerated() {
                 if view.contains(touchLocation) {
                     selectedBlockView = view
-                    selectedBlockViewOriginalPosition = view.position
+                    selectedBlockViewIndex = i
                     selectedBlockView?.block?.selected = true
                     selectedBlockView?.scale(to: CGSize(width: boardView!.cellSize!*5, height: boardView!.cellSize!*5))
                     selectedOffset = CGPoint(x: (view.position.x-touchLocation.x)*view.xScale,
                                              y: (view.position.y-touchLocation.y)*view.yScale)
                     selectedBlockView!.position.x = touchLocation.x - selectedBlockView!.size.width/2+selectedBlockView!.offset!.x
                     selectedBlockView!.position.y = touchLocation.y + selectedBlockView!.size.height - selectedBlockView!.offset!.y
-                    selectedBlockViewOriginalColor = selectedBlockView!.color
                     selectedBlockView!.color = UIColor.clear
 
                 }
@@ -169,14 +171,13 @@ class SingleGameScene: SKScene, BoardObserver {
                     }
                 }
             }
-            selectedBlockView.position = selectedBlockViewOriginalPosition!
+            selectedBlockView.position = blockViewPositions[selectedBlockViewIndex!]
             selectedBlockView.setScale(1.0)
-            selectedBlockView.color = selectedBlockViewOriginalColor!
+            selectedBlockView.color = blockViewColor[selectedBlockViewIndex!]
             processGameState()
         }
         self.selectedOffset = nil
         self.selectedBlockView = nil
-        self.selectedBlockViewOriginalPosition = nil
     }
     
 
