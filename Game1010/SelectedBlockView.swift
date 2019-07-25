@@ -33,10 +33,16 @@ class SelectedBlockView : SKSpriteNode {
             let positionX = CGFloat(offset.x)*cellSize!
             let positionY = -CGFloat(offset.y)*cellSize!
             view.position = CGPoint(x: positionX, y: positionY)
+            let frame = SKShapeNode(rectOf: view.frame.size)
+            frame.strokeColor = .orange
+            frame.zPosition = 10
+            frame.position.x = cellSize!/2
+            frame.position.y = -cellSize!/2
+            view.addChild(frame)
             addChild(view)
         }
         offset = CGPoint(x: CGFloat(5)/CGFloat(block.width) * cellSize!,y:CGFloat(5)/CGFloat(block.height) * cellSize!)
-        alpha = 0.5
+        alpha = 1.0
     }
     
     func clearBlock() {
