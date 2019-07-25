@@ -79,8 +79,8 @@ class GameViewController: UIViewController, GameDelegate {
     }
 
     func gameCompleted(board: Board, completed: Bool, seconds: Int, score: Int) {
+        let boardString = board.asString()
         if completed {
-            let boardString = board.asString()
             LevelStorage().registerRecord(type: board.name, current: boardString, score: score, seconds: seconds)
             LevelStorage().removeBoardInProgress(type: board.name)
             if let view = self.view as! SKView? {
@@ -98,6 +98,7 @@ class GameViewController: UIViewController, GameDelegate {
                 view.ignoresSiblingOrder = true
             }
         }else {
+            LevelStorage().registerRecord(type: board.name, current: boardString, score: score, seconds: seconds)
             LevelStorage().storeBoardInProgress(board: board, score: score, seconds: seconds)
             viewDidLoad()
         }
