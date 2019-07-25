@@ -127,13 +127,21 @@ class SingleGameScene: SKScene, BoardObserver {
                     selectedBlockView?.scale(to: CGSize(width: boardView!.cellSize!*5, height: boardView!.cellSize!*5))
                     selectedOffset = CGPoint(x: (view.position.x-touchLocation.x)*view.xScale,
                                              y: (view.position.y-touchLocation.y)*view.yScale)
-                    selectedBlockView!.position.x = touchLocation.x - selectedBlockView!.size.width/2+selectedBlockView!.offset!.x
-                    selectedBlockView!.position.y = touchLocation.y + selectedBlockView!.size.height - selectedBlockView!.offset!.y
+                    selectedBlockView!.position = selectedBlockPosition(touchLocation)
                     selectedBlockView!.color = UIColor.clear
 
                 }
             }
         }
+    }
+    
+    func selectedBlockPosition(_ touchLocation: CGPoint) -> CGPoint {
+        var offset : CGFloat = 1.0
+        if selectedBlockView!.block!.height>3 {
+            offset = 1.0 + CGFloat(selectedBlockView!.block!.height-3)/5
+        }
+        return CGPoint(x: touchLocation.x - selectedBlockView!.size.width/2 + selectedBlockView!.offset!.x,
+                       y: touchLocation.y + offset*selectedBlockView!.size.height - selectedBlockView!.offset!.y)
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -142,8 +150,7 @@ class SingleGameScene: SKScene, BoardObserver {
         }
         let touchLocation = touch.location(in: self)
         if let selectedBlockView = selectedBlockView {
-            selectedBlockView.position.x = touchLocation.x - selectedBlockView.size.width/2 + selectedBlockView.offset!.x
-            selectedBlockView.position.y = touchLocation.y + selectedBlockView.size.height - selectedBlockView.offset!.y
+            selectedBlockView.position = selectedBlockPosition(touchLocation)
         }
     }
     
@@ -153,8 +160,9 @@ class SingleGameScene: SKScene, BoardObserver {
         }
         let touchLocation = touch.location(in: self)
         if let selectedBlockView = selectedBlockView {
-            let touchX = touchLocation.x - selectedBlockView.size.width/2 + selectedBlockView.offset!.x + boardView!.cellSize!/2
-            let touchY = touchLocation.y + selectedBlockView.size.height - selectedBlockView.offset!.y - boardView!.cellSize!/2
+            let blockPosition = selectedBlockPosition(touchLocation)
+            let touchX = blockPosition.x + boardView!.cellSize!/2
+            let touchY = blockPosition.y - boardView!.cellSize!/2
             print("Release touch at \(touchX),\(touchY)")
             print("Board at \(boardView!.position.x),\(boardView!.position.y)")
             if boardView!.contains(CGPoint(x: touchX,
