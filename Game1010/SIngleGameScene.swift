@@ -98,13 +98,13 @@ class SingleGameScene: SKScene, BoardObserver {
     }
     
     func displayTime() {
-        if record != nil && timeCounter>record! {
-            timeText?.fontColor = .red
-        }
         timeText?.text = "\(timeAsString(timeCounter))"
     }
 
     func displayScore() {
+        if record != nil && score>record! {
+            scoreText?.fontColor = .green
+        }
         scoreText?.text = "Score: \(score)"
     }
 
