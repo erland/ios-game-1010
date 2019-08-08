@@ -1,0 +1,16 @@
+/* 
+  Localizable.strings
+  Game1010
+
+  Created by Erland Isaksson on 2019-08-08.
+  Copyright © 2019 Erland Isaksson. All rights reserved.
+*/
+"selectMode" = "Select mode";
+"newGame" = "New game";
+"previousGame" = "Previous game";
+"congratulations" = "Congratulations";
+"completedIn" = "Completed in";
+"score" = "Score";
+"quit" = "Quit";
+"pause" = "Pause";
+"record" = "Record";

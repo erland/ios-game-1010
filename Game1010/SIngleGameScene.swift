@@ -30,6 +30,10 @@ class SingleGameScene: SKScene, BoardObserver {
     var blockViewPositions : [CGPoint] = []
     var blockViewColor : [UIColor] = []
 
+    override func sceneDidLoad() {
+        localize()
+    }
+    
     func setup(delegate: GameDelegate, board: Board, startTime: Int, score: Int) {
         self.gameDelegate = delegate
         
@@ -105,7 +109,7 @@ class SingleGameScene: SKScene, BoardObserver {
         if record != nil && score>record! {
             scoreText?.fontColor = .green
         }
-        scoreText?.text = "Score: \(score)"
+        scoreText?.text = "\(NSLocalizedString("score", comment: "score")): \(score)"
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

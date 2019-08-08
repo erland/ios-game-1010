@@ -13,6 +13,10 @@ class SelectGameScene: SKScene {
     var buttonNew: SKLabelNode?
     var buttonResume: SKLabelNode?
 
+    override func sceneDidLoad() {
+        localize()
+    }
+    
     func setup(delegate: GameDelegate) {
         self.gameDelegate = delegate
         
