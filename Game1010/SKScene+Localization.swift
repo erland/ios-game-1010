@@ -22,7 +22,7 @@ extension SKScene {
                         
                         if result!.numberOfRanges>0 {
                             for i in 1..<result!.numberOfRanges {
-                                let key = text.substring(with: Range(result!.range(at: i), in: text)!)
+                                let key = String(text[Range(result!.range(at: i), in: text)!])
                                 let replaceString = "@\"\(key)\""
                                 let replacementString = NSLocalizedString(key, comment: key)
                                 print("Replacing: \(replaceString) With: \(replacementString)")
